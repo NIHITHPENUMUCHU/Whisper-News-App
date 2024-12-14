@@ -6,11 +6,13 @@ import { ArticleCard } from "@/components/ArticleCard";
 import { Button } from "@/components/ui/button";
 import { SubmitArticle } from "@/components/SubmitArticle";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { PenLine } from "lucide-react";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { PenLine, Filter, Search } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useNavigate } from "react-router-dom";
 
-// Sample articles data
-const mockArticles = [
+// Export mockArticles so it can be used in ArticleDetail
+export const mockArticles = [
   {
     id: 1,
     title: "The Future of Sustainable Energy",
@@ -107,6 +109,7 @@ const Index = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   const isMobile = useIsMobile();
+  const navigate = useNavigate();
 
   const filteredArticles = mockArticles.filter((article) => {
     const matchesCategory =
@@ -118,14 +121,48 @@ const Index = () => {
     return matchesCategory && matchesSearch;
   });
 
+  const handleArticleClick = (id: number) => {
+    navigate(`/article/${id}`);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white border-b sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <Logo />
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full md:w-auto">
-              <SearchBar onSearch={setSearchQuery} />
+            <div className="flex items-center gap-2 w-full md:w-auto">
+              {isMobile ? (
+                <>
+                  <Sheet>
+                    <SheetTrigger asChild>
+                      <Button variant="outline" size="icon">
+                        <Search className="h-4 w-4" />
+                      </Button>
+                    </SheetTrigger>
+                    <SheetContent side="top" className="w-full p-4">
+                      <SearchBar onSearch={setSearchQuery} />
+                    </SheetContent>
+                  </Sheet>
+                  <Sheet>
+                    <SheetTrigger asChild>
+                      <Button variant="outline" size="icon">
+                        <Filter className="h-4 w-4" />
+                      </Button>
+                    </SheetTrigger>
+                    <SheetContent side="bottom" className="h-[50vh]">
+                      <div className="py-4">
+                        <CategoryFilter
+                          selectedCategory={selectedCategory}
+                          onSelectCategory={setSelectedCategory}
+                        />
+                      </div>
+                    </SheetContent>
+                  </Sheet>
+                </>
+              ) : (
+                <SearchBar onSearch={setSearchQuery} />
+              )}
               <Dialog>
                 <DialogTrigger asChild>
                   <Button className="bg-whisper-500 hover:bg-whisper-600 text-white whitespace-nowrap">
@@ -143,16 +180,24 @@ const Index = () => {
       </header>
 
       <main className="container mx-auto px-4 py-8">
-        <div className="mb-8 overflow-x-auto -mx-4 px-4 pb-4">
-          <CategoryFilter
-            selectedCategory={selectedCategory}
-            onSelectCategory={setSelectedCategory}
-          />
-        </div>
+        {!isMobile && (
+          <div className="mb-8 overflow-x-auto -mx-4 px-4 pb-4">
+            <CategoryFilter
+              selectedCategory={selectedCategory}
+              onSelectCategory={setSelectedCategory}
+            />
+          </div>
+        )}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredArticles.map((article) => (
-            <ArticleCard key={article.id} {...article} />
+            <div
+              key={article.id}
+              onClick={() => handleArticleClick(article.id)}
+              className="cursor-pointer"
+            >
+              <ArticleCard {...article} />
+            </div>
           ))}
         </div>
       </main>

@@ -36,7 +36,7 @@ export const ArticleCard = ({
           </Badge>
           <span className="text-sm text-gray-500">{date}</span>
         </div>
-        <h3 className="font-playfair text-lg sm:text-xl font-semibold leading-tight hover:text-whisper-500 transition-colors cursor-pointer">
+        <h3 className="font-playfair text-lg sm:text-xl font-semibold leading-tight hover:text-whisper-500 transition-colors">
           {title}
         </h3>
       </CardHeader>
