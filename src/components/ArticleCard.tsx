@@ -7,6 +7,7 @@ interface ArticleCardProps {
   category: string;
   date: string;
   author: string;
+  imageUrl?: string;
 }
 
 export const ArticleCard = ({
@@ -15,9 +16,19 @@ export const ArticleCard = ({
   category,
   date,
   author,
+  imageUrl,
 }: ArticleCardProps) => {
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 animate-fade-in">
+      {imageUrl && (
+        <div className="w-full h-48 overflow-hidden">
+          <img
+            src={imageUrl}
+            alt={title}
+            className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+          />
+        </div>
+      )}
       <CardHeader className="space-y-2">
         <div className="flex items-center justify-between">
           <Badge variant="outline" className="bg-whisper-50 text-whisper-700">
