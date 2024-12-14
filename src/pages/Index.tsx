@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { SubmitArticle } from "@/components/SubmitArticle";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { PenLine } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 // Sample articles data
 const mockArticles = [
@@ -105,6 +106,7 @@ const mockArticles = [
 const Index = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
+  const isMobile = useIsMobile();
 
   const filteredArticles = mockArticles.filter((article) => {
     const matchesCategory =
@@ -118,20 +120,20 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b">
+      <header className="bg-white border-b sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <Logo />
-            <div className="flex items-center gap-4">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full md:w-auto">
               <SearchBar onSearch={setSearchQuery} />
               <Dialog>
                 <DialogTrigger asChild>
-                  <Button className="bg-whisper-500 hover:bg-whisper-600 text-white">
+                  <Button className="bg-whisper-500 hover:bg-whisper-600 text-white whitespace-nowrap">
                     <PenLine className="mr-2 h-4 w-4" />
-                    Submit Article
+                    {isMobile ? "Submit" : "Submit Article"}
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="max-w-4xl">
+                <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
                   <SubmitArticle />
                 </DialogContent>
               </Dialog>
@@ -141,14 +143,14 @@ const Index = () => {
       </header>
 
       <main className="container mx-auto px-4 py-8">
-        <div className="mb-8">
+        <div className="mb-8 overflow-x-auto -mx-4 px-4 pb-4">
           <CategoryFilter
             selectedCategory={selectedCategory}
             onSelectCategory={setSelectedCategory}
           />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredArticles.map((article) => (
             <ArticleCard key={article.id} {...article} />
           ))}

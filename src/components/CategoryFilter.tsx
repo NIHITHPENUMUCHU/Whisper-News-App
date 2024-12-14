@@ -1,4 +1,5 @@
 import { Button } from "./ui/button";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export const categories = [
   "All",
@@ -19,8 +20,10 @@ export const CategoryFilter = ({
   selectedCategory,
   onSelectCategory,
 }: CategoryFilterProps) => {
+  const isMobile = useIsMobile();
+
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex flex-nowrap gap-2 min-w-max">
       {categories.map((category) => (
         <Button
           key={category}
@@ -31,6 +34,7 @@ export const CategoryFilter = ({
               ? "bg-whisper-500 text-white hover:bg-whisper-600"
               : "hover:bg-whisper-50"
           }`}
+          size={isMobile ? "sm" : "default"}
         >
           {category}
         </Button>
