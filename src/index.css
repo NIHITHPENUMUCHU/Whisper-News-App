@@ -38,16 +38,16 @@
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Playfair Display', serif;
+    @apply font-playfair;
   }
 
   body {
-    font-family: 'Inter', sans-serif;
+    @apply font-inter;
   }
 }
 
 .article-content {
-  @apply prose prose-lg max-w-none prose-headings:font-playfair prose-p:text-gray-700 prose-a:text-whisper-500;
+  @apply prose prose-lg max-w-none;
 }
 
 .fade-in {

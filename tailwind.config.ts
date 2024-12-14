@@ -18,6 +18,10 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        playfair: ["Playfair Display", "serif"],
+        inter: ["Inter", "sans-serif"],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -88,6 +92,30 @@ export default {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "fade-in": "fade-in 0.5s ease-out",
+      },
+      typography: {
+        DEFAULT: {
+          css: {
+            h1: {
+              fontFamily: "'Playfair Display', serif",
+            },
+            h2: {
+              fontFamily: "'Playfair Display', serif",
+            },
+            h3: {
+              fontFamily: "'Playfair Display', serif",
+            },
+            h4: {
+              fontFamily: "'Playfair Display', serif",
+            },
+            h5: {
+              fontFamily: "'Playfair Display', serif",
+            },
+            h6: {
+              fontFamily: "'Playfair Display', serif",
+            },
+          },
+        },
       },
     },
   },
