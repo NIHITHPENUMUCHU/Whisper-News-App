@@ -1,8 +1,11 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { mockArticles } from "./Index";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft } from "lucide-react";
 
 const ArticleDetail = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const article = mockArticles.find((a) => a.id === Number(id));
 
   if (!article) {
@@ -11,6 +14,14 @@ const ArticleDetail = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <Button
+        variant="ghost"
+        onClick={() => navigate("/")}
+        className="mb-6 hover:bg-whisper-50"
+      >
+        <ArrowLeft className="mr-2 h-4 w-4" />
+        Back to Home
+      </Button>
       <article className="max-w-4xl mx-auto">
         {article.imageUrl && (
           <img
