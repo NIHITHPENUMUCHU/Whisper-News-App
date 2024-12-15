@@ -9,7 +9,172 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      admin_users: {
+        Row: {
+          created_at: string | null
+          email: string
+          id: string
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          id: string
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          id?: string
+        }
+        Relationships: []
+      }
+      article_links: {
+        Row: {
+          article_id: number | null
+          created_at: string | null
+          id: number
+          title: string | null
+          url: string
+        }
+        Insert: {
+          article_id?: number | null
+          created_at?: string | null
+          id?: number
+          title?: string | null
+          url: string
+        }
+        Update: {
+          article_id?: number | null
+          created_at?: string | null
+          id?: number
+          title?: string | null
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "article_links_article_id_fkey"
+            columns: ["article_id"]
+            isOneToOne: false
+            referencedRelation: "articles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      articles: {
+        Row: {
+          author: string
+          category: string
+          content: string
+          created_at: string | null
+          date: string | null
+          excerpt: string
+          id: number
+          image_url: string | null
+          status: string | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          author: string
+          category: string
+          content: string
+          created_at?: string | null
+          date?: string | null
+          excerpt: string
+          id?: number
+          image_url?: string | null
+          status?: string | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          author?: string
+          category?: string
+          content?: string
+          created_at?: string | null
+          date?: string | null
+          excerpt?: string
+          id?: number
+          image_url?: string | null
+          status?: string | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      edit_requests: {
+        Row: {
+          article_id: number | null
+          created_at: string | null
+          id: number
+          requested_changes: string
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          article_id?: number | null
+          created_at?: string | null
+          id?: number
+          requested_changes: string
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          article_id?: number | null
+          created_at?: string | null
+          id?: number
+          requested_changes?: string
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "edit_requests_article_id_fkey"
+            columns: ["article_id"]
+            isOneToOne: false
+            referencedRelation: "articles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      jobs: {
+        Row: {
+          company: string
+          created_at: string | null
+          description: string
+          id: number
+          location: string
+          requirements: string | null
+          salary_range: string | null
+          status: string | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          company: string
+          created_at?: string | null
+          description: string
+          id?: number
+          location: string
+          requirements?: string | null
+          salary_range?: string | null
+          status?: string | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          company?: string
+          created_at?: string | null
+          description?: string
+          id?: number
+          location?: string
+          requirements?: string | null
+          salary_range?: string | null
+          status?: string | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
