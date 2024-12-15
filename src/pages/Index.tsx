@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { format } from "date-fns";
 
 const Index = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -21,6 +22,7 @@ const Index = () => {
   const isMobile = useIsMobile();
   const navigate = useNavigate();
 
+  // Fetch articles with their links
   const { data: articles = [] } = useQuery({
     queryKey: ["articles"],
     queryFn: async () => {
@@ -42,6 +44,7 @@ const Index = () => {
     },
   });
 
+  // Fetch jobs
   const { data: jobs = [] } = useQuery({
     queryKey: ["jobs"],
     queryFn: async () => {
@@ -154,7 +157,14 @@ const Index = () => {
                   onClick={() => handleArticleClick(article.id)}
                   className="cursor-pointer"
                 >
-                  <ArticleCard {...article} />
+                  <ArticleCard
+                    title={article.title}
+                    excerpt={article.excerpt}
+                    category={article.category}
+                    date={format(new Date(article.created_at), 'MMM dd, yyyy')}
+                    author={article.author}
+                    imageUrl={article.image_url}
+                  />
                 </div>
               ))}
             </div>
