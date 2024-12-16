@@ -12,6 +12,7 @@ interface ArticleCardProps {
   imageUrl?: string;
   likes: number;
   dislikes: number;
+  status?: string;
   onVoteChange?: () => void;
 }
 
@@ -25,16 +26,23 @@ export const ArticleCard = ({
   imageUrl,
   likes,
   dislikes,
+  status,
   onVoteChange,
 }: ArticleCardProps) => {
+  const isArchived = status === "archived" || status === "deleted";
+
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 animate-fade-in h-full flex flex-col">
+    <Card className={`overflow-hidden transition-shadow duration-300 animate-fade-in h-full flex flex-col ${
+      isArchived ? 'opacity-75 hover:opacity-100' : 'hover:shadow-lg'
+    }`}>
       {imageUrl && (
         <div className="w-full h-48 sm:h-40 lg:h-48 overflow-hidden">
           <img
             src={imageUrl}
             alt={title}
-            className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+            className={`w-full h-full object-cover transition-transform duration-300 ${
+              !isArchived && 'hover:scale-105'
+            }`}
           />
         </div>
       )}
@@ -45,9 +53,16 @@ export const ArticleCard = ({
           </Badge>
           <span className="text-sm text-gray-500">{date}</span>
         </div>
-        <h3 className="font-playfair text-lg sm:text-xl font-semibold leading-tight hover:text-whisper-500 transition-colors">
+        <h3 className={`font-playfair text-lg sm:text-xl font-semibold leading-tight ${
+          !isArchived && 'hover:text-whisper-500'
+        } transition-colors`}>
           {title}
         </h3>
+        {status && (
+          <Badge variant="secondary" className="mt-2">
+            {status.charAt(0).toUpperCase() + status.slice(1)}
+          </Badge>
+        )}
       </CardHeader>
       <CardContent className="space-y-4 flex-grow">
         <p className="text-gray-600 line-clamp-3 text-sm sm:text-base">{excerpt}</p>
@@ -55,12 +70,14 @@ export const ArticleCard = ({
           <p className="text-sm text-gray-500">
             By {author === "anonymous" ? "Anonymous" : author}
           </p>
-          <VoteButtons 
-            articleId={id} 
-            initialLikes={likes} 
-            initialDislikes={dislikes}
-            onVoteChange={onVoteChange}
-          />
+          {!isArchived && (
+            <VoteButtons 
+              articleId={id} 
+              initialLikes={likes} 
+              initialDislikes={dislikes}
+              onVoteChange={onVoteChange}
+            />
+          )}
         </div>
       </CardContent>
     </Card>
