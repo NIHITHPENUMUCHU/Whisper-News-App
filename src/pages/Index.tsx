@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { SubmitArticle } from "@/components/SubmitArticle";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { PenLine, Filter, Search } from "lucide-react";
+import { PenLine, Filter, Search, Archive } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
@@ -22,20 +22,13 @@ const Index = () => {
   const isMobile = useIsMobile();
   const navigate = useNavigate();
 
-  // Fetch articles with their links
+  // Fetch articles
   const { data: articles = [], refetch: refetchArticles } = useQuery({
     queryKey: ["articles"],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("articles")
-        .select(`
-          *,
-          article_links (
-            id,
-            url,
-            title
-          )
-        `)
+        .select("*")
         .eq("status", "published")
         .order("created_at", { ascending: false });
 
@@ -79,12 +72,27 @@ const Index = () => {
     navigate(`/article/${id}`);
   };
 
+  const handleArchiveClick = () => {
+    navigate('/archived');
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white border-b sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <Logo />
+            <div className="flex items-center gap-4">
+              <Logo />
+              <Button
+                variant="outline"
+                size="sm"
+                className="hidden md:flex items-center gap-2"
+                onClick={handleArchiveClick}
+              >
+                <Archive className="h-4 w-4" />
+                Archived Articles
+              </Button>
+            </div>
             <div className="flex items-center gap-2 w-full md:w-auto">
               {isMobile ? (
                 <>
@@ -113,6 +121,14 @@ const Index = () => {
                       </div>
                     </SheetContent>
                   </Sheet>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={handleArchiveClick}
+                    className="md:hidden"
+                  >
+                    <Archive className="h-4 w-4" />
+                  </Button>
                 </>
               ) : (
                 <SearchBar onSearch={setSearchQuery} />
