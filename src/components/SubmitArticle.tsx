@@ -13,8 +13,11 @@ import {
   SelectValue,
 } from "./ui/select";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { useNavigate } from "react-router-dom";
 
 export const SubmitArticle = () => {
+  const navigate = useNavigate();
   const [isAnonymous, setIsAnonymous] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
@@ -25,12 +28,11 @@ export const SubmitArticle = () => {
     links: [] as string[],
   });
   const [newLink, setNewLink] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleMediaUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files) {
-      // In a real app, you would upload these files to a server
-      // For now, we'll create object URLs
       const urls = Array.from(files).map(file => URL.createObjectURL(file));
       setFormData(prev => ({
         ...prev,
@@ -49,14 +51,52 @@ export const SubmitArticle = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would typically send the data to your backend
-    console.log({
-      ...formData,
-      author: isAnonymous ? "anonymous" : formData.author,
-    });
-    toast.success("Article submitted for review!");
+    setIsSubmitting(true);
+
+    try {
+      const excerpt = formData.content.slice(0, 150) + "...";
+      
+      const { data, error } = await supabase
+        .from('articles')
+        .insert([
+          {
+            title: formData.title,
+            author: isAnonymous ? "anonymous" : formData.author,
+            category: formData.category,
+            content: formData.content,
+            excerpt: excerpt,
+            image_url: formData.mediaUrls[0] || null,
+            status: 'published'
+          }
+        ])
+        .select();
+
+      if (error) throw error;
+
+      if (data && data[0] && formData.links.length > 0) {
+        const articleId = data[0].id;
+        const linksToInsert = formData.links.map(url => ({
+          article_id: articleId,
+          url,
+        }));
+
+        const { error: linksError } = await supabase
+          .from('article_links')
+          .insert(linksToInsert);
+
+        if (linksError) throw linksError;
+      }
+
+      toast.success("Article published successfully!");
+      navigate('/');
+    } catch (error) {
+      console.error('Error submitting article:', error);
+      toast.error("Failed to publish article. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -192,8 +232,9 @@ export const SubmitArticle = () => {
       <Button
         type="submit"
         className="w-full bg-whisper-500 hover:bg-whisper-600 text-white"
+        disabled={isSubmitting}
       >
-        Submit Article for Review
+        {isSubmitting ? "Publishing..." : "Publish Article"}
       </Button>
     </form>
   );
