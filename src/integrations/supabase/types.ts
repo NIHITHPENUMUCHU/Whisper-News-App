@@ -59,6 +59,38 @@ export type Database = {
           },
         ]
       }
+      article_votes: {
+        Row: {
+          article_id: number | null
+          created_at: string | null
+          id: number
+          ip_address: string
+          vote_type: string
+        }
+        Insert: {
+          article_id?: number | null
+          created_at?: string | null
+          id?: number
+          ip_address: string
+          vote_type: string
+        }
+        Update: {
+          article_id?: number | null
+          created_at?: string | null
+          id?: number
+          ip_address?: string
+          vote_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "article_votes_article_id_fkey"
+            columns: ["article_id"]
+            isOneToOne: false
+            referencedRelation: "articles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       articles: {
         Row: {
           author: string
@@ -66,9 +98,11 @@ export type Database = {
           content: string
           created_at: string | null
           date: string | null
+          dislikes: number | null
           excerpt: string
           id: number
           image_url: string | null
+          likes: number | null
           status: string | null
           title: string
           updated_at: string | null
@@ -79,9 +113,11 @@ export type Database = {
           content: string
           created_at?: string | null
           date?: string | null
+          dislikes?: number | null
           excerpt: string
           id?: number
           image_url?: string | null
+          likes?: number | null
           status?: string | null
           title: string
           updated_at?: string | null
@@ -92,9 +128,11 @@ export type Database = {
           content?: string
           created_at?: string | null
           date?: string | null
+          dislikes?: number | null
           excerpt?: string
           id?: number
           image_url?: string | null
+          likes?: number | null
           status?: string | null
           title?: string
           updated_at?: string | null

@@ -23,7 +23,7 @@ const Index = () => {
   const navigate = useNavigate();
 
   // Fetch articles with their links
-  const { data: articles = [] } = useQuery({
+  const { data: articles = [], refetch: refetchArticles } = useQuery({
     queryKey: ["articles"],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -158,12 +158,16 @@ const Index = () => {
                   className="cursor-pointer"
                 >
                   <ArticleCard
+                    id={article.id}
                     title={article.title}
                     excerpt={article.excerpt}
                     category={article.category}
                     date={format(new Date(article.created_at), 'MMM dd, yyyy')}
                     author={article.author}
                     imageUrl={article.image_url}
+                    likes={article.likes}
+                    dislikes={article.dislikes}
+                    onVoteChange={refetchArticles}
                   />
                 </div>
               ))}

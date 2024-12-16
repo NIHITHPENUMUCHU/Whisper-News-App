@@ -3,12 +3,15 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { VoteButtons } from "@/components/VoteButtons";
+import { useToast } from "@/hooks/use-toast";
 
 const ArticleDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { toast } = useToast();
 
-  const { data: article, isLoading } = useQuery({
+  const { data: article, isLoading, refetch } = useQuery({
     queryKey: ["article", id],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -28,6 +31,10 @@ const ArticleDetail = () => {
       return data;
     },
   });
+
+  const handleVoteChange = () => {
+    refetch();
+  };
 
   if (isLoading) {
     return <div className="container mx-auto px-4 py-8">Loading...</div>;
@@ -55,7 +62,15 @@ const ArticleDetail = () => {
             className="w-full h-[400px] object-cover rounded-lg mb-8"
           />
         )}
-        <h1 className="font-playfair text-4xl font-bold mb-4">{article.title}</h1>
+        <div className="flex items-center justify-between mb-4">
+          <h1 className="font-playfair text-4xl font-bold">{article.title}</h1>
+          <VoteButtons
+            articleId={article.id}
+            initialLikes={article.likes}
+            initialDislikes={article.dislikes}
+            onVoteChange={handleVoteChange}
+          />
+        </div>
         <div className="flex items-center gap-4 text-gray-600 mb-8">
           <span>{new Date(article.date).toLocaleDateString()}</span>
           <span>

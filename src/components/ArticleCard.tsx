@@ -1,22 +1,31 @@
 import { Card, CardContent, CardHeader } from "./ui/card";
 import { Badge } from "./ui/badge";
+import { VoteButtons } from "./VoteButtons";
 
 interface ArticleCardProps {
+  id: number;
   title: string;
   excerpt: string;
   category: string;
   date: string;
   author: string;
   imageUrl?: string;
+  likes: number;
+  dislikes: number;
+  onVoteChange?: () => void;
 }
 
 export const ArticleCard = ({
+  id,
   title,
   excerpt,
   category,
   date,
   author,
   imageUrl,
+  likes,
+  dislikes,
+  onVoteChange,
 }: ArticleCardProps) => {
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 animate-fade-in h-full flex flex-col">
@@ -40,11 +49,19 @@ export const ArticleCard = ({
           {title}
         </h3>
       </CardHeader>
-      <CardContent className="space-y-2 flex-grow">
+      <CardContent className="space-y-4 flex-grow">
         <p className="text-gray-600 line-clamp-3 text-sm sm:text-base">{excerpt}</p>
-        <p className="text-sm text-gray-500">
-          By {author === "anonymous" ? "Anonymous" : author}
-        </p>
+        <div className="flex items-center justify-between">
+          <p className="text-sm text-gray-500">
+            By {author === "anonymous" ? "Anonymous" : author}
+          </p>
+          <VoteButtons 
+            articleId={id} 
+            initialLikes={likes} 
+            initialDislikes={dislikes}
+            onVoteChange={onVoteChange}
+          />
+        </div>
       </CardContent>
     </Card>
   );
