@@ -36,13 +36,16 @@ export const ArticleCard = ({
       isArchived ? 'opacity-75 hover:opacity-100' : 'hover:shadow-lg'
     }`}>
       {imageUrl && (
-        <div className="w-full h-48 sm:h-40 lg:h-48 overflow-hidden">
+        <div className="relative w-full h-48 sm:h-40 lg:h-48 overflow-hidden">
           <img
             src={imageUrl}
             alt={title}
             className={`w-full h-full object-cover transition-transform duration-300 ${
               !isArchived && 'hover:scale-105'
             }`}
+            onError={(e) => {
+              e.currentTarget.src = '/placeholder.svg';
+            }}
           />
         </div>
       )}
