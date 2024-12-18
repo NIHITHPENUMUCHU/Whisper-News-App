@@ -133,5 +133,50 @@ export const sampleJobs = [
     requirements: "10+ years of systems design experience",
     salary_range: "$160,000 - $200,000",
     status: "active"
+  },
+  {
+    title: "Cloud Solutions Architect",
+    company: "CloudTech Solutions",
+    location: "Remote",
+    description: "Design and implement cloud infrastructure solutions...",
+    requirements: "AWS certification and 5+ years cloud experience",
+    salary_range: "$140,000 - $180,000",
+    status: "active"
+  },
+  {
+    title: "AI Ethics Researcher",
+    company: "EthicalAI Labs",
+    location: "Boston, MA",
+    description: "Research ethical implications of AI development...",
+    requirements: "PhD in Ethics, Computer Science, or related field",
+    salary_range: "$120,000 - $150,000",
+    status: "active"
+  },
+  {
+    title: "Quantum Computing Engineer",
+    company: "QuantumTech",
+    location: "Berkeley, CA",
+    description: "Develop quantum computing algorithms and applications...",
+    requirements: "PhD in Physics or Computer Science",
+    salary_range: "$150,000 - $200,000",
+    status: "active"
+  },
+  {
+    title: "Cybersecurity Analyst",
+    company: "SecureNet Defense",
+    location: "Washington, DC",
+    description: "Protect organization's digital assets and infrastructure...",
+    requirements: "CISSP certification and 3+ years experience",
+    salary_range: "$110,000 - $140,000",
+    status: "active"
+  },
+  {
+    title: "AR/VR Developer",
+    company: "ImmersiveTech",
+    location: "Los Angeles, CA",
+    description: "Create immersive AR/VR experiences...",
+    requirements: "Unity/Unreal Engine experience",
+    salary_range: "$100,000 - $130,000",
+    status: "active"
   }
 ];

@@ -133,5 +133,50 @@ export const sampleArticles = [
     author: "Dr. Sarah Palmer",
     image_url: "https://source.unsplash.com/random/800x600/?biotechnology,science",
     status: "published"
+  },
+  {
+    title: "The Impact of 5G Technology",
+    excerpt: "How 5G is revolutionizing connectivity and enabling new possibilities.",
+    content: "The rollout of 5G networks is transforming how we connect...",
+    category: "Technology",
+    author: "James Wilson",
+    image_url: "https://source.unsplash.com/random/800x600/?5g,technology",
+    status: "published"
+  },
+  {
+    title: "Sustainable Urban Planning",
+    excerpt: "Cities are adopting eco-friendly designs for a greener future.",
+    content: "Modern urban planning is increasingly focused on sustainability...",
+    category: "World",
+    author: "Emma Davis",
+    image_url: "https://source.unsplash.com/random/800x600/?city,sustainable",
+    status: "published"
+  },
+  {
+    title: "Advances in Robotics",
+    excerpt: "Latest developments in robotics and automation technology.",
+    content: "Robotics technology is advancing at an unprecedented pace...",
+    category: "Technology",
+    author: "Dr. Robert Chen",
+    image_url: "https://source.unsplash.com/random/800x600/?robot,technology",
+    status: "published"
+  },
+  {
+    title: "Mental Wellness in Digital Age",
+    excerpt: "Strategies for maintaining mental health in a connected world.",
+    content: "As our lives become increasingly digital...",
+    category: "Health",
+    author: "Dr. Sarah Thompson",
+    image_url: "https://source.unsplash.com/random/800x600/?wellness,mental",
+    status: "published"
+  },
+  {
+    title: "Future of Space Tourism",
+    excerpt: "Commercial space travel is becoming a reality for civilians.",
+    content: "Space tourism is no longer just a sci-fi fantasy...",
+    category: "Science",
+    author: "Michael Torres",
+    image_url: "https://source.unsplash.com/random/800x600/?space,tourism",
+    status: "published"
   }
 ];
