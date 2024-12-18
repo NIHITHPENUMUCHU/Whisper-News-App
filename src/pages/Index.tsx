@@ -24,7 +24,7 @@ const Index = () => {
 
       if (error) {
         console.error("Error fetching articles:", error);
-        throw error;
+        return [];
       }
       return data || [];
     },
@@ -42,7 +42,7 @@ const Index = () => {
 
       if (error) {
         console.error("Error fetching jobs:", error);
-        throw error;
+        return [];
       }
       return data || [];
     },
