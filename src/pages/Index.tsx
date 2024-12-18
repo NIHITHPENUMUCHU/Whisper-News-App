@@ -22,8 +22,11 @@ const Index = () => {
         .eq("status", "published")
         .order("created_at", { ascending: false });
 
-      if (error) throw error;
-      return data;
+      if (error) {
+        console.error("Error fetching articles:", error);
+        throw error;
+      }
+      return data || [];
     },
   });
 
@@ -37,8 +40,11 @@ const Index = () => {
         .eq("status", "active")
         .order("created_at", { ascending: false });
 
-      if (error) throw error;
-      return data;
+      if (error) {
+        console.error("Error fetching jobs:", error);
+        throw error;
+      }
+      return data || [];
     },
   });
 
