@@ -2,11 +2,29 @@ export const sampleArticles = [
   {
     title: "The Future of AI in Healthcare",
     excerpt: "Exploring how artificial intelligence is revolutionizing medical diagnosis and treatment.",
-    content: "Artificial intelligence is transforming healthcare in unprecedented ways...",
+    content: `Artificial intelligence is transforming healthcare in unprecedented ways. From diagnostic assistance to personalized treatment plans, AI is becoming an integral part of modern medicine.
+
+The integration of machine learning algorithms has shown remarkable accuracy in detecting various conditions, often matching or exceeding human expertise in specific areas.
+
+Key developments include:
+- AI-powered diagnostic tools
+- Personalized treatment recommendations
+- Automated patient monitoring systems
+- Predictive analytics for preventive care`,
     category: "Technology",
     author: "Dr. Sarah Chen",
-    image_url: "https://source.unsplash.com/random/800x600/?ai,healthcare",
-    status: "published"
+    image_url: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80",
+    status: "published",
+    article_links: [
+      {
+        url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        title: "Watch: AI in Medical Diagnosis"
+      },
+      {
+        url: "https://www.who.int/health-topics/digital-health",
+        title: "WHO Digital Health Guidelines"
+      }
+    ]
   },
   {
     title: "Global Climate Summit 2024",
@@ -20,11 +38,25 @@ export const sampleArticles = [
   {
     title: "Breakthrough in Quantum Computing",
     excerpt: "Scientists achieve quantum supremacy with new processor design.",
-    content: "A team of researchers has announced a major breakthrough...",
+    content: `A team of researchers has announced a major breakthrough in quantum computing technology. The new quantum processor demonstrates unprecedented stability and error correction capabilities.
+
+This development brings us closer to practical quantum computers that could revolutionize fields such as cryptography, drug discovery, and climate modeling.
+
+Technical achievements:
+- Reduced decoherence time
+- Improved qubit stability
+- Enhanced error correction
+- Scalable architecture design`,
     category: "Science",
     author: "Dr. Robert Kumar",
-    image_url: "https://source.unsplash.com/random/800x600/?quantum,computer",
-    status: "published"
+    image_url: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80",
+    status: "published",
+    article_links: [
+      {
+        url: "https://www.youtube.com/watch?v=JhHMJCUmq28",
+        title: "Understanding Quantum Computing"
+      }
+    ]
   },
   {
     title: "The Rise of Remote Work Culture",
