@@ -27,14 +27,16 @@ export const VoteButtons = ({
     
     setIsVoting(true);
     try {
-      const { data: { ip } } = await (await fetch('https://api.ipify.org?format=json')).json();
-      
+      // Generate a unique identifier based on article and browser fingerprint
+      const fingerprint = `${articleId}-${navigator.userAgent}-${window.innerWidth}`;
+      const hashedIp = btoa(fingerprint);
+
       // Check if user has already voted
       const { data: existingVote } = await supabase
         .from('article_votes')
         .select('*')
         .eq('article_id', articleId)
-        .eq('ip_address', ip)
+        .eq('ip_address', hashedIp)
         .single();
 
       if (existingVote) {
@@ -50,7 +52,7 @@ export const VoteButtons = ({
       const { error: voteError } = await supabase
         .from('article_votes')
         .insert([
-          { article_id: articleId, ip_address: ip, vote_type: voteType }
+          { article_id: articleId, ip_address: hashedIp, vote_type: voteType }
         ]);
 
       if (voteError) {
@@ -102,7 +104,10 @@ export const VoteButtons = ({
       <Button
         variant="outline"
         size="sm"
-        onClick={() => handleVote('like')}
+        onClick={(e) => {
+          e.stopPropagation();
+          handleVote('like');
+        }}
         className="flex items-center gap-2"
         disabled={isVoting}
       >
@@ -112,7 +117,10 @@ export const VoteButtons = ({
       <Button
         variant="outline"
         size="sm"
-        onClick={() => handleVote('dislike')}
+        onClick={(e) => {
+          e.stopPropagation();
+          handleVote('dislike');
+        }}
         className="flex items-center gap-2"
         disabled={isVoting}
       >

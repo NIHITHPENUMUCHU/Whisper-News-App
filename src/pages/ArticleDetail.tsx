@@ -1,11 +1,14 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Calendar, User, Tag, Clock } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { VoteButtons } from "@/components/VoteButtons";
 import { useToast } from "@/hooks/use-toast";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { format } from "date-fns";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
 
 const ArticleDetail = () => {
   const { id } = useParams();
@@ -74,7 +77,15 @@ const ArticleDetail = () => {
   }
 
   const isVideoUrl = (url: string) => {
-    return url.includes('youtube.com') || url.includes('vimeo.com');
+    return url?.includes('youtube.com') || url?.includes('vimeo.com');
+  };
+
+  const formatYouTubeUrl = (url: string) => {
+    if (!url) return '';
+    if (url.includes('youtube.com/watch?v=')) {
+      return url.replace('watch?v=', 'embed/');
+    }
+    return url;
   };
 
   return (
@@ -88,72 +99,97 @@ const ArticleDetail = () => {
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Home
         </Button>
-        <article className="max-w-4xl mx-auto">
+        
+        <article className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
           {article.image_url && (
-            <img
-              src={article.image_url}
-              alt={article.title}
-              className="w-full h-[400px] object-cover rounded-lg mb-8"
-              onError={(e) => {
-                e.currentTarget.src = '/placeholder.svg';
-              }}
-            />
-          )}
-          <div className="flex items-center justify-between mb-4">
-            <h1 className="font-playfair text-4xl font-bold">{article.title}</h1>
-            <VoteButtons
-              articleId={article.id}
-              initialLikes={article.likes}
-              initialDislikes={article.dislikes}
-              onVoteChange={handleVoteChange}
-            />
-          </div>
-          <div className="flex items-center gap-4 text-gray-600 mb-8">
-            <span>{new Date(article.created_at).toLocaleDateString()}</span>
-            <span>
-              By {article.author === "anonymous" ? "Anonymous" : article.author}
-            </span>
-            <span className="bg-whisper-50 text-whisper-700 px-3 py-1 rounded-full text-sm">
-              {article.category}
-            </span>
-          </div>
-          <div className="prose max-w-none">
-            <p className="text-lg leading-relaxed">{article.excerpt}</p>
-            <div className="text-lg leading-relaxed mt-6 whitespace-pre-wrap">
-              {article.content}
+            <div className="relative w-full h-[400px] overflow-hidden">
+              <img
+                src={article.image_url}
+                alt={article.title}
+                className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                onError={(e) => {
+                  e.currentTarget.src = '/placeholder.svg';
+                }}
+              />
             </div>
-            
-            {article.article_links && article.article_links.length > 0 && (
-              <div className="mt-8 border-t pt-6">
-                <h2 className="text-xl font-semibold mb-4">Related Content</h2>
-                <div className="space-y-4">
-                  {article.article_links.map((link) => (
-                    <div key={link.id} className="rounded-lg border p-4">
-                      {isVideoUrl(link.url) ? (
-                        <div className="aspect-video">
-                          <iframe
-                            src={link.url.replace('watch?v=', 'embed/')}
-                            title={link.title || "Related video"}
-                            className="w-full h-full rounded"
-                            allowFullScreen
-                          />
-                        </div>
-                      ) : (
-                        <a
-                          href={link.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-whisper-600 hover:text-whisper-800 hover:underline flex items-center gap-2"
-                        >
-                          {link.title || link.url}
-                          <ArrowLeft className="h-4 w-4 rotate-180" />
-                        </a>
-                      )}
-                    </div>
-                  ))}
-                </div>
+          )}
+          
+          <div className="p-8">
+            <div className="flex items-center justify-between mb-6">
+              <h1 className="font-playfair text-4xl font-bold text-gray-900">{article.title}</h1>
+              <VoteButtons
+                articleId={article.id}
+                initialLikes={article.likes}
+                initialDislikes={article.dislikes}
+                onVoteChange={handleVoteChange}
+              />
+            </div>
+
+            <div className="flex flex-wrap gap-4 mb-6">
+              <div className="flex items-center text-gray-600">
+                <Calendar className="w-4 h-4 mr-2" />
+                <span>{format(new Date(article.created_at), 'MMMM dd, yyyy')}</span>
               </div>
-            )}
+              <div className="flex items-center text-gray-600">
+                <User className="w-4 h-4 mr-2" />
+                <span>{article.author === "anonymous" ? "Anonymous" : article.author}</span>
+              </div>
+              <div className="flex items-center text-gray-600">
+                <Tag className="w-4 h-4 mr-2" />
+                <Badge variant="secondary" className="bg-whisper-50 text-whisper-700">
+                  {article.category}
+                </Badge>
+              </div>
+              {article.updated_at && article.updated_at !== article.created_at && (
+                <div className="flex items-center text-gray-600">
+                  <Clock className="w-4 h-4 mr-2" />
+                  <span>Updated: {format(new Date(article.updated_at), 'MMMM dd, yyyy')}</span>
+                </div>
+              )}
+            </div>
+
+            <div className="prose max-w-none">
+              <p className="text-xl leading-relaxed text-gray-700 mb-8">{article.excerpt}</p>
+              
+              <Separator className="my-8" />
+              
+              <div className="text-lg leading-relaxed text-gray-800 whitespace-pre-wrap">
+                {article.content}
+              </div>
+              
+              {article.article_links && article.article_links.length > 0 && (
+                <div className="mt-12">
+                  <h2 className="text-2xl font-semibold mb-6">Related Content</h2>
+                  <div className="grid gap-6">
+                    {article.article_links.map((link) => (
+                      <div key={link.id} className="rounded-lg border p-4 bg-gray-50">
+                        {isVideoUrl(link.url) ? (
+                          <div className="aspect-video rounded-lg overflow-hidden">
+                            <iframe
+                              src={formatYouTubeUrl(link.url)}
+                              title={link.title || "Related video"}
+                              className="w-full h-full"
+                              allowFullScreen
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            />
+                          </div>
+                        ) : (
+                          <a
+                            href={link.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-whisper-600 hover:text-whisper-800 hover:underline flex items-center gap-2 p-2"
+                          >
+                            {link.title || link.url}
+                            <ArrowLeft className="h-4 w-4 rotate-180" />
+                          </a>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </article>
       </div>

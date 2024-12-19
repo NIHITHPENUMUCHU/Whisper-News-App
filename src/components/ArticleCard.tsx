@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { VoteButtons } from "./VoteButtons";
+import { format } from "date-fns";
 
 interface ArticleCardProps {
   id: number;
@@ -30,13 +31,14 @@ export const ArticleCard = ({
   onVoteChange,
 }: ArticleCardProps) => {
   const isArchived = status === "archived" || status === "deleted";
+  const formattedDate = format(new Date(date), 'MMM dd, yyyy');
 
   return (
     <Card className={`overflow-hidden transition-shadow duration-300 animate-fade-in h-full flex flex-col ${
       isArchived ? 'opacity-75 hover:opacity-100' : 'hover:shadow-lg'
     }`}>
       {imageUrl && (
-        <div className="relative w-full h-48 sm:h-40 lg:h-48 overflow-hidden">
+        <div className="relative w-full h-48 sm:h-40 lg:h-48 overflow-hidden bg-gray-100">
           <img
             src={imageUrl}
             alt={title}
@@ -46,6 +48,7 @@ export const ArticleCard = ({
             onError={(e) => {
               e.currentTarget.src = '/placeholder.svg';
             }}
+            loading="lazy"
           />
         </div>
       )}
@@ -54,7 +57,7 @@ export const ArticleCard = ({
           <Badge variant="outline" className="bg-whisper-50 text-whisper-700">
             {category}
           </Badge>
-          <span className="text-sm text-gray-500">{date}</span>
+          <span className="text-sm text-gray-500">{formattedDate}</span>
         </div>
         <h3 className={`font-playfair text-lg sm:text-xl font-semibold leading-tight ${
           !isArchived && 'hover:text-whisper-500'
