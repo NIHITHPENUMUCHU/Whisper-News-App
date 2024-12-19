@@ -47,6 +47,18 @@ const ArticleDetail = () => {
     refetch();
   };
 
+  const isVideoUrl = (url: string) => {
+    return url?.includes('youtube.com') || url?.includes('vimeo.com');
+  };
+
+  const formatYouTubeUrl = (url: string) => {
+    if (!url) return '';
+    if (url.includes('youtube.com/watch?v=')) {
+      return url.replace('watch?v=', 'embed/');
+    }
+    return url;
+  };
+
   if (isLoading) {
     return (
       <div className="container mx-auto px-4 py-8">
@@ -76,18 +88,6 @@ const ArticleDetail = () => {
     );
   }
 
-  const isVideoUrl = (url: string) => {
-    return url?.includes('youtube.com') || url?.includes('vimeo.com');
-  };
-
-  const formatYouTubeUrl = (url: string) => {
-    if (!url) return '';
-    if (url.includes('youtube.com/watch?v=')) {
-      return url.replace('watch?v=', 'embed/');
-    }
-    return url;
-  };
-
   return (
     <ScrollArea className="h-[calc(100vh-4rem)]">
       <div className="container mx-auto px-4 py-8">
@@ -110,6 +110,7 @@ const ArticleDetail = () => {
                 onError={(e) => {
                   e.currentTarget.src = '/placeholder.svg';
                 }}
+                loading="lazy"
               />
             </div>
           )}
@@ -149,39 +150,48 @@ const ArticleDetail = () => {
             </div>
 
             <div className="prose max-w-none">
-              <p className="text-xl leading-relaxed text-gray-700 mb-8">{article.excerpt}</p>
+              <div className="text-xl leading-relaxed text-gray-700 mb-8">
+                <p className="font-medium">{article.excerpt}</p>
+              </div>
               
               <Separator className="my-8" />
               
-              <div className="text-lg leading-relaxed text-gray-800 whitespace-pre-wrap">
-                {article.content}
+              <div className="text-lg leading-relaxed text-gray-800 whitespace-pre-wrap space-y-6">
+                {article.content.split('\n\n').map((paragraph, index) => (
+                  <p key={index}>{paragraph}</p>
+                ))}
               </div>
               
               {article.article_links && article.article_links.length > 0 && (
-                <div className="mt-12">
+                <div className="mt-12 space-y-8">
                   <h2 className="text-2xl font-semibold mb-6">Related Content</h2>
                   <div className="grid gap-6">
                     {article.article_links.map((link: any) => (
-                      <div key={link.id} className="rounded-lg border p-4 bg-gray-50">
+                      <div key={link.id} className="rounded-lg border p-4 bg-gray-50 hover:bg-gray-100 transition-colors">
                         {isVideoUrl(link.url) ? (
-                          <div className="aspect-video rounded-lg overflow-hidden">
-                            <iframe
-                              src={formatYouTubeUrl(link.url)}
-                              title={link.title || "Related video"}
-                              className="w-full h-full"
-                              allowFullScreen
-                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            />
+                          <div className="space-y-4">
+                            <h3 className="text-lg font-medium text-gray-900">{link.title || "Related Video"}</h3>
+                            <div className="aspect-video rounded-lg overflow-hidden">
+                              <iframe
+                                src={formatYouTubeUrl(link.url)}
+                                title={link.title || "Related video"}
+                                className="w-full h-full"
+                                allowFullScreen
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                              />
+                            </div>
                           </div>
                         ) : (
                           <a
                             href={link.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-whisper-600 hover:text-whisper-800 hover:underline flex items-center gap-2 p-2"
+                            className="flex items-center justify-between gap-4 p-2 group"
                           >
-                            {link.title || link.url}
-                            <ExternalLink className="h-4 w-4" />
+                            <span className="text-whisper-600 group-hover:text-whisper-800 group-hover:underline flex-grow">
+                              {link.title || link.url}
+                            </span>
+                            <ExternalLink className="h-4 w-4 text-gray-400 group-hover:text-whisper-600" />
                           </a>
                         )}
                       </div>
