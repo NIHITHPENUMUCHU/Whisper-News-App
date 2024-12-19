@@ -32,12 +32,16 @@ export const VoteButtons = ({
       const hashedIp = btoa(fingerprint);
 
       // Check if user has already voted
-      const { data: existingVote } = await supabase
+      const { data: existingVote, error: fetchError } = await supabase
         .from('article_votes')
         .select('*')
         .eq('article_id', articleId)
         .eq('ip_address', hashedIp)
-        .single();
+        .maybeSingle();
+
+      if (fetchError) {
+        throw fetchError;
+      }
 
       if (existingVote) {
         toast({
