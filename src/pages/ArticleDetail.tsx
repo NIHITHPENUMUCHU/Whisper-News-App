@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Calendar, User, Tag, Clock } from "lucide-react";
+import { ArrowLeft, Calendar, User, Tag, Clock, ExternalLink } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { VoteButtons } from "@/components/VoteButtons";
@@ -161,7 +161,7 @@ const ArticleDetail = () => {
                 <div className="mt-12">
                   <h2 className="text-2xl font-semibold mb-6">Related Content</h2>
                   <div className="grid gap-6">
-                    {article.article_links.map((link) => (
+                    {article.article_links.map((link: any) => (
                       <div key={link.id} className="rounded-lg border p-4 bg-gray-50">
                         {isVideoUrl(link.url) ? (
                           <div className="aspect-video rounded-lg overflow-hidden">
@@ -181,7 +181,7 @@ const ArticleDetail = () => {
                             className="text-whisper-600 hover:text-whisper-800 hover:underline flex items-center gap-2 p-2"
                           >
                             {link.title || link.url}
-                            <ArrowLeft className="h-4 w-4 rotate-180" />
+                            <ExternalLink className="h-4 w-4" />
                           </a>
                         )}
                       </div>

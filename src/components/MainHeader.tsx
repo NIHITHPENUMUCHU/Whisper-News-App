@@ -2,9 +2,10 @@ import { Logo } from "./Logo";
 import { SearchBar } from "./SearchBar";
 import { Button } from "./ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
-import { PenLine, Filter, Search, Archive } from "lucide-react";
+import { PenLine, Filter, Search, Archive, Briefcase } from "lucide-react";
 import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 import { SubmitArticle } from "./SubmitArticle";
+import { JobSubmission } from "./job/JobSubmission";
 
 interface MainHeaderProps {
   onSearch: (query: string) => void;
@@ -75,6 +76,17 @@ export const MainHeader = ({ onSearch, onArchiveClick, isMobile }: MainHeaderPro
               </DialogTrigger>
               <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
                 <SubmitArticle />
+              </DialogContent>
+            </Dialog>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button className="bg-whisper-500 hover:bg-whisper-600 text-white whitespace-nowrap">
+                  <Briefcase className="mr-2 h-4 w-4" />
+                  {isMobile ? "Post Job" : "Post Job"}
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+                <JobSubmission />
               </DialogContent>
             </Dialog>
           </div>
